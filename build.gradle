@@ -1,0 +1,41 @@
+group 'com.learnqa'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//    }
+//}
+
+dependencies {
+    compile 'org.seleniumhq.selenium:selenium-java:3.12.0'
+    compile 'org.seleniumhq.selenium:selenium-api:3.12.0'
+    compile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.testng', name: 'testng', version: '6.14.3'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.5'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+// use this test task on all the plugins wherver the published jar will be used.
+test {
+    useTestNG(){
+        suites "TestNG.xml"
+        options {
+            parallel = 'methods'
+            threadCount = 3
+        }
+        //set TestNG output dir
+        outputDirectory = file("$project.buildDir//testngOutput")
+        //required to turn on TestNG reports
+        useDefaultListeners = true
+    }
+}
