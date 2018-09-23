@@ -1,0 +1,9 @@
+language: java
+sudo: required
+addons:
+  chrome: stable
+services:
+  - docker
+jdk:
+  - oraclejdk8
+script: ./gradlew test
