@@ -84,7 +84,7 @@ public class BaseTest {
             ChromeOptions options = new ChromeOptions();
             options.merge(caps);
             options.setHeadless(CHROME_HEADLESS_MODE);
-            options.addArguments("--window-size=1280,800"); // minimum resolution of XL Release
+            options.addArguments("--headless", "window-size=1024,768", "--no-sandbox");
             driver = new ChromeDriver(options);
         } else {
             throw new RuntimeException("Browser type unsupported");
