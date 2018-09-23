@@ -20,6 +20,10 @@ repositories {
 
 // use this test task on all the plugins wherver the published jar will be used.
 test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
     useTestNG(){
         suites "TestNG.xml"
         options {
