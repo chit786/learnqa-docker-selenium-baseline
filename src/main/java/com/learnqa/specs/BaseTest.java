@@ -37,7 +37,7 @@ public class BaseTest {
     protected static final boolean REMOTE_DRIVER = Boolean.valueOf(System.getProperty("REMOTE_DRIVER", "false"));
     protected static final String SELENIUM_HOST = System.getProperty("SELENIUM_HOST", "localhost");
     protected static final int SELENIUM_PORT = Integer.valueOf(System.getProperty("SELENIUM_PORT", "4444"));
-    protected static final boolean CHROME_HEADLESS_MODE = Boolean.valueOf(System.getProperty("CHROME_HEADLESS_MODE", "false"));
+    protected static final boolean CHROME_HEADLESS_MODE = Boolean.valueOf(System.getProperty("CHROME_HEADLESS_MODE", "true"));
     protected static final boolean FIREFOX_HEADLESS_MODE = Boolean.valueOf(System.getProperty("FIREFOX_HEADLESS_MODE", "true"));
     public static final String WEB_SERVER = System.getProperty("WEB_SERVER", "https://duckduckgo.com/");
     public static ThreadLocal<RemoteWebDriver> driverTl = new ThreadLocal<RemoteWebDriver>();
@@ -69,7 +69,7 @@ public class BaseTest {
         getDriver().manage().window().maximize();
     }
 
-    private void setupLocalDriver(Capabilities caps) {
+    private void setupLocalDriver(DesiredCapabilities caps) {
         if (BROWSER.equals("firefox")) {
             System.setProperty("webdriver.gecko.driver", copyDriver("geckodriver"));
             FirefoxBinary firefoxBinary = new FirefoxBinary();
@@ -82,9 +82,14 @@ public class BaseTest {
         } else if (BROWSER.equals("chrome")) {
             System.setProperty("webdriver.chrome.driver", copyDriver("chromedriver"));
             ChromeOptions options = new ChromeOptions();
+            caps.setAcceptInsecureCerts(true);
             options.merge(caps);
-            options.setHeadless(CHROME_HEADLESS_MODE);
-            options.addArguments("--headless", "window-size=1024,768", "--no-sandbox");
+            if(CHROME_HEADLESS_MODE){
+                options.addArguments("--headless");
+            }
+            options.addArguments("window-size=1024,768", "--no-sandbox");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--allow-insecure-localhost");
             driver = new ChromeDriver(options);
         } else {
             throw new RuntimeException("Browser type unsupported");
