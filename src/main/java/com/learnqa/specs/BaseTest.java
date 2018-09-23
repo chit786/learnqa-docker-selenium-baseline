@@ -24,8 +24,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.*;
 
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
@@ -40,7 +39,7 @@ public class BaseTest {
     protected static final int SELENIUM_PORT = Integer.valueOf(System.getProperty("SELENIUM_PORT", "4444"));
     protected static final boolean CHROME_HEADLESS_MODE = Boolean.valueOf(System.getProperty("CHROME_HEADLESS_MODE", "false"));
     protected static final boolean FIREFOX_HEADLESS_MODE = Boolean.valueOf(System.getProperty("FIREFOX_HEADLESS_MODE", "true"));
-    public static final String WEB_SERVER = System.getProperty("WEB_SERVER", "http://localhost:5516");
+    public static final String WEB_SERVER = System.getProperty("WEB_SERVER", "https://duckduckgo.com/");
     public static ThreadLocal<RemoteWebDriver> driverTl = new ThreadLocal<RemoteWebDriver>();
     public static RemoteWebDriver driver;
     BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -96,7 +95,7 @@ public class BaseTest {
 
         // create a new HAR with the label "login"
         proxy.newHar("login");
-        getDriver().get(WEB_SERVER);
+//        getDriver().get(WEB_SERVER);
     }
 
     public static RemoteWebDriver getDriver(){
@@ -115,8 +114,11 @@ public class BaseTest {
                 File file = resolve.toFile();
                 file.setExecutable(true);
                 file.deleteOnExit();
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
+            } catch (Exception e) {
+                File file = resolve.toFile();
+                file.setExecutable(true);
+                file.deleteOnExit();
+//                throw new IllegalStateException(e);
             }
         }
         return resolve.toString();
@@ -152,7 +154,8 @@ public class BaseTest {
         driver = new RemoteWebDriver(
                 new URL("http://" + SELENIUM_HOST + ":" + SELENIUM_PORT + "/wd/hub"),
                 capabilities);
-        getDriver().get(WEB_SERVER);
+        driverTl.set(driver);
+//        getDriver().get(WEB_SERVER);
     }
 
     @AfterClass
@@ -166,7 +169,8 @@ public class BaseTest {
         }
         proxy.stop();
         getDriver().manage().deleteAllCookies();
-        getDriver().quit();
+        getDriver().close();
+//        getDriver().quit();
     }
 
 }

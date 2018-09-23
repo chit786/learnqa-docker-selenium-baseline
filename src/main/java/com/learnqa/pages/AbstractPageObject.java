@@ -1,12 +1,12 @@
 package com.learnqa.pages;
 
 import java.util.List;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.learnqa.specs.BaseTest;
 
@@ -36,10 +36,10 @@ public abstract class AbstractPageObject {
     protected void isLoaded() throws Error {
         //Define a list of WebElements that match the unique element locator for the page
         if(getUniqueElement()!=null){
-            List<WebElement> uniqueElement = BaseTest.driver.findElements(getUniqueElement());
+            List<WebElement> uniqueElement = this.driver.findElements(getUniqueElement());
 
             // Assert that the unique element is present in the DOM
-            Assert.assertTrue("Unique Element \'" + getUniqueElement().toString() + "\' not found for " + this.getClass().getSimpleName(), (uniqueElement.size() > 0));
+            Assert.assertTrue((uniqueElement.size() > 0), "Unique Element \'" + getUniqueElement().toString() + "\' not found for " + this.getClass().getSimpleName());
 
             // Wait until the unique element is visible in the browser and ready to use. This helps make sure the page is
             // loaded before the next step of the tests continue.

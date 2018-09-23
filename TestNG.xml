@@ -1,7 +1,8 @@
-<suite name="Test-method Suite" parallel="methods" thread-count="2" >
-    <test name="Test-method test" group-by-instances="true">
+<suite name="Test-method Suite">
+    <test name="learnqa test" parallel="classes" thread-count="2">
         <classes>
-            <class name="com.xebialabs.LoginTest" />
+            <class name="com.learnqa.HomePageTest" />
+            <class name="com.learnqa.RightMenuTest" />
         </classes>
     </test>
 </suite>

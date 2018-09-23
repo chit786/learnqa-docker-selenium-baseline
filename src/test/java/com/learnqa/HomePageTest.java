@@ -8,19 +8,20 @@ import com.learnqa.specs.BaseTest;
 
 import com.learnqa.pages.*;
 
-public class LoginTest extends BaseTest {
+public class HomePageTest extends BaseTest {
     @BeforeMethod
     public void testStartUp(){
-
+        HomePage.openMe()
+                .closeRobot();
     }
 
     @Test
-    public void openHomePage() {
-
+    public void searchSelenium() {
+        HomePage.searchBy("selenium");
     }
 
-    @AfterMethod
-    public void logout(){
-
+    @Test
+    public void searchZalenium() {
+        HomePage.searchBy("zalenium");
     }
 }
