@@ -143,12 +143,12 @@ public class BaseTest {
 
     private void setupRemoteDriver(DesiredCapabilities caps) throws MalformedURLException {
         DesiredCapabilities capabilities;
-        if (BROWSER.equals("firefox")) {
+        if ("firefox".equals(BROWSER)) {
             capabilities = DesiredCapabilities.firefox();
-        } else if (BROWSER.equals("internetExplorer")) {
+        } else if ("internetExplorer".equals(BROWSER)) {
             capabilities = DesiredCapabilities.internetExplorer();
             capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-        } else if (BROWSER.equals("chrome")) {
+        } else if ("chrome".equals(BROWSER)) {
             capabilities = DesiredCapabilities.chrome();
         } else {
             throw new RuntimeException("Browser type unsupported");
