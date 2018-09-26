@@ -8,8 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import com.learnqa.specs.BaseTest;
-
 /**
  * Created by chitrang on 18/02/17.
  */

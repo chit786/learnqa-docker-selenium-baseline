@@ -10,10 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -42,8 +39,8 @@ public class BaseTest {
     public static final String WEB_SERVER = System.getProperty("WEB_SERVER", "https://duckduckgo.com/");
     public static ThreadLocal<RemoteWebDriver> driverTl = new ThreadLocal<RemoteWebDriver>();
     public static RemoteWebDriver driver;
-    BrowserMobProxy proxy = new BrowserMobProxyServer();
-    File harFile ;
+    private BrowserMobProxy proxy = new BrowserMobProxyServer();
+    private File harFile ;
 
     @BeforeClass
     public void setupWebDriver() throws MalformedURLException {
@@ -70,7 +67,7 @@ public class BaseTest {
     }
 
     private void setupLocalDriver(DesiredCapabilities caps) {
-        if (BROWSER.equals("firefox")) {
+        if (("firefox").equals(BROWSER)) {
             System.setProperty("webdriver.gecko.driver", copyDriver("geckodriver"));
             FirefoxBinary firefoxBinary = new FirefoxBinary();
             if(FIREFOX_HEADLESS_MODE){
@@ -79,7 +76,7 @@ public class BaseTest {
             FirefoxOptions firefoxOptions = new FirefoxOptions(caps);
             firefoxOptions.setBinary(firefoxBinary);
             driver = new FirefoxDriver(firefoxOptions);
-        } else if (BROWSER.equals("chrome")) {
+        } else if (("chrome").equals(BROWSER)) {
             System.setProperty("webdriver.chrome.driver", copyDriver("chromedriver"));
             ChromeOptions options = new ChromeOptions();
             caps.setAcceptInsecureCerts(true);
