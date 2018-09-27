@@ -18,7 +18,8 @@ repositories {
     mavenCentral()
 }
 
-// use this test task on all the plugins wherver the published jar will be used.
+import org.apache.tools.ant.taskdefs.condition.Os
+
 test {
     testLogging {
         events "passed", "skipped", "failed"
@@ -35,4 +36,28 @@ test {
         //required to turn on TestNG reports
         useDefaultListeners = true
     }
+    systemProperties = [
+        REMOTE_DRIVER: System.getProperty('REMOTE_DRIVER', 'false')
+    ]
+}
+
+task setupZalenium(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', 'scripts/zalenium-start.bat'
+    } else {
+        commandLine './scripts/zalenium-start.sh'
+    }
+}
+
+task tearDownZalenium(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', 'scripts/zalenium-stop.bat'
+    } else {
+        commandLine './scripts/zalenium-stop.sh'
+    }
+}
+
+if (project.hasProperty("dockerSetup")){
+    test.dependsOn setupZalenium
+    test.finalizedBy tearDownZalenium
 }

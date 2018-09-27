@@ -17,6 +17,7 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -41,6 +42,7 @@ public class BaseTest {
     public static RemoteWebDriver driver;
     private BrowserMobProxy proxy = new BrowserMobProxyServer();
     private File harFile ;
+    private Proxy seleniumProxy;
 
     @BeforeClass
     public void setupWebDriver() throws MalformedURLException {
@@ -49,7 +51,10 @@ public class BaseTest {
         proxy.start(new Random().nextInt(65534));
 
         // get the Selenium proxy object
-        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+        seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+        int port = proxy.getPort();
+        String ipAddress = new NetworkUtils().getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
+        seleniumProxy.setHttpProxy(ipAddress + ":" + port);
 
         // configure it as a desired capability
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -97,7 +102,6 @@ public class BaseTest {
 
         // create a new HAR with the label "login"
         proxy.newHar("login");
-//        getDriver().get(WEB_SERVER);
     }
 
     public static RemoteWebDriver getDriver(){
@@ -153,11 +157,16 @@ public class BaseTest {
         } else {
             throw new RuntimeException("Browser type unsupported");
         }
+        caps.merge(capabilities);
         driver = new RemoteWebDriver(
                 new URL("http://" + SELENIUM_HOST + ":" + SELENIUM_PORT + "/wd/hub"),
-                capabilities);
+                caps);
         driverTl.set(driver);
-//        getDriver().get(WEB_SERVER);
+        // enable more detailed HAR capture, if desired (see CaptureType for the complete list)
+        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
+
+        // create a new HAR with the label "login"
+        proxy.newHar("login");
     }
 
     @AfterClass
@@ -172,7 +181,6 @@ public class BaseTest {
         proxy.stop();
         getDriver().manage().deleteAllCookies();
         getDriver().close();
-//        getDriver().quit();
     }
 
 }
