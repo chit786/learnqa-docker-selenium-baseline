@@ -6,4 +6,4 @@ services:
   - docker
 jdk:
   - oraclejdk8
-script: ./gradlew test
+script: ./gradlew clean test -PdockerSetup=zalenium -DREMOTE_DRIVER=true
