@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+docker pull selenoid/vnc_chrome:64.0
+
 docker run -d                                   \
 --name selenoid                                 \
 -p 4444:4444                                    \
