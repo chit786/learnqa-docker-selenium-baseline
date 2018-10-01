@@ -49,6 +49,14 @@ task setupZalenium(type: Exec) {
     }
 }
 
+task setupSelenoid(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', 'scripts/selenoid-start.bat'
+    } else {
+        commandLine './scripts/selenoid-start.sh'
+    }
+}
+
 task tearDownZalenium(type: Exec) {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         commandLine 'cmd', '/c', 'scripts/zalenium-stop.bat'
@@ -57,7 +65,20 @@ task tearDownZalenium(type: Exec) {
     }
 }
 
+task tearDownSelenoid(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', 'scripts/selenoid-stop.bat'
+    } else {
+        commandLine './scripts/selenoid-stop.sh'
+    }
+}
+
 if (project.hasProperty("dockerSetup")){
-    test.dependsOn setupZalenium
-    test.finalizedBy tearDownZalenium
+    if(project.property("dockerSetup") == "zalenium") {
+        test.dependsOn setupZalenium
+        test.finalizedBy tearDownZalenium
+    } else if(project.property("dockerSetup") == "selenoid") {
+        test.dependsOn setupSelenoid
+        test.finalizedBy tearDownSelenoid
+    }
 }
