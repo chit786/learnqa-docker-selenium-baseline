@@ -1,3 +1,7 @@
+plugins {
+    id "com.energizedwork.webdriver-binaries" version "1.4"
+}
+
 group 'com.learnqa'
 version '1.0-SNAPSHOT'
 
@@ -19,6 +23,12 @@ repositories {
 }
 
 import org.apache.tools.ant.taskdefs.condition.Os
+
+webdriverBinaries {
+    chromedriver '2.42'
+    geckodriver '0.23.0'
+    iedriverserver '3.8.0'
+}
 
 test {
     testLogging {
