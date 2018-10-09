@@ -73,7 +73,7 @@ public class BaseTest {
 
     private void setupLocalDriver(DesiredCapabilities caps) {
         if (("firefox").equals(BROWSER)) {
-            System.setProperty("webdriver.gecko.driver", copyDriver("geckodriver"));
+//            System.setProperty("webdriver.gecko.driver", copyDriver("geckodriver")); // uncomment if using driver binaries locally from resources under src/main
             FirefoxBinary firefoxBinary = new FirefoxBinary();
             if(FIREFOX_HEADLESS_MODE){
                 firefoxBinary.addCommandLineOptions("--headless");
@@ -82,7 +82,7 @@ public class BaseTest {
             firefoxOptions.setBinary(firefoxBinary);
             driver = new FirefoxDriver(firefoxOptions);
         } else if (("chrome").equals(BROWSER)) {
-            System.setProperty("webdriver.chrome.driver", copyDriver("chromedriver"));
+//            System.setProperty("webdriver.chrome.driver", copyDriver("chromedriver")); // uncomment if using driver binaries locally from resources under src/main
             ChromeOptions options = new ChromeOptions();
             caps.setAcceptInsecureCerts(true);
             options.merge(caps);
